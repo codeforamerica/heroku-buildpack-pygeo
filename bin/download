@@ -1,0 +1,65 @@
+#!/usr/bin/env python
+
+from sys import argv
+from os.path import exists, splitext
+from tempfile import mkdtemp
+from subprocess import Popen
+from zipfile import ZipFile
+from hashlib import md5
+from shutil import copy
+
+print '-----> Preparing datasource'
+
+try:
+    data_zip_url, build_dir, cache_dir = argv[1:]
+except ValueError:
+    print 'Usage: %s <url> <build dir> <cache dir>' % argv[0]
+    exit(1)
+
+data_zip_file = '%s/%s.zip' % (cache_dir, md5(data_zip_url).hexdigest())
+
+if not exists(data_zip_file):
+    print '       Downloading', data_zip_url, 'to', data_zip_file
+    curl = Popen(('curl', '-o', data_zip_file, '-L', data_zip_url))
+    curl.wait()
+    
+    if curl.returncode:
+        raise RuntimeError('curl returned %d' % curl.returncode)
+
+src_name = None
+tmp_dir = mkdtemp()
+
+with ZipFile(data_zip_file, 'r') as archive:
+    for name in sorted(archive.namelist()):
+        base, ext = splitext(name.lower())
+    
+        if ext not in ('.dbf', '.prj', '.shp', '.shx', '.json'):
+            continue
+        
+        tmp_path = tmp_dir + '/datasource' + ext
+        print '      ', name, '-->', tmp_path
+        
+        with open(tmp_path, 'w') as tmp:
+            tmp.write(archive.read(name))
+            
+        if ext in ('.shp', '.json'):
+            src_name = tmp_path
+
+if not src_name:
+    raise RuntimeError('No .shp or .json found in %s' % data_zip_file)
+
+if exists(cache_dir + '/datasource.shp'):
+    print '       Found', cache_dir + '/datasource.shp'
+else:
+    print '      ', src_name, '-->', cache_dir + '/datasource.shp'
+    print '       (ogr2ogr might take a long time)'
+    ogr2ogr = Popen(('ogr2ogr', cache_dir + '/datasource.shp', src_name))
+    ogr2ogr.wait()
+    
+    if ogr2ogr.returncode:
+        raise RuntimeError('ogr2ogr returned %d' % ogr2ogr.returncode)
+
+copy(cache_dir + '/datasource.dbf', build_dir)
+copy(cache_dir + '/datasource.prj', build_dir)
+copy(cache_dir + '/datasource.shp', build_dir)
+copy(cache_dir + '/datasource.shx', build_dir)

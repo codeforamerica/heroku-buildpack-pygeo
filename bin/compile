@@ -205,9 +205,68 @@ if (grep -Fiq "hg+" requirements.txt) then
   bpwatch stop mercurial_install
 fi
 
+# Set up a directory for pre-compiled binaries
+mkdir -p $BUILD_DIR/vendor
+
+#
+# Install GEOS
+#
+puts-step "Fetching and installing GEOS 3.3.8"
+
+if [ -d $CACHE_DIR/vendor/geos ]; then
+  echo "GEOS found in $CACHE_DIR/vendor/geos" | indent
+else
+  curl -o geos.tgz -L http://forever.codeforamerica.org.s3.amazonaws.com/heroku-pygeo/geos-3.3.8-heroku.tar.gz >/dev/null 2>&1
+  tar -C $CACHE_DIR -xzvf geos.tgz >/dev/null 2>&1
+  rm geos.tgz
+  echo "GEOS cached in $CACHE_DIR/vendor/geos" | indent
+fi
+
+cp -r $CACHE_DIR/vendor/geos /app/vendor/
+
+#
+# Install Proj
+#
+puts-step "Fetching and installing Proj 4.8.0"
+
+if [ -d $CACHE_DIR/vendor/proj ]; then
+  echo "Proj found in $CACHE_DIR/vendor/proj" | indent
+else
+  curl -o proj.tgz -L http://forever.codeforamerica.org.s3.amazonaws.com/heroku-pygeo/proj-4.8.0-heroku.tar.gz >/dev/null 2>&1
+  tar -C $CACHE_DIR -xzvf proj.tgz >/dev/null 2>&1
+  rm proj.tgz
+  echo "Proj cached in $CACHE_DIR/vendor/proj" | indent
+fi
+
+cp -r $CACHE_DIR/vendor/proj /app/vendor/
+
+#
+# Install GDAL
+#
+puts-step "Fetching and installing GDAL 1.10.0"
+
+if [ -d $CACHE_DIR/vendor/gdal ]; then
+  echo "GDAL found in $CACHE_DIR/vendor/gdal" | indent
+else
+  curl -o gdal.tgz -L http://forever.codeforamerica.org.s3.amazonaws.com/heroku-pygeo/gdal-1.10.0-heroku.tar.gz >/dev/null 2>&1
+  tar -C $CACHE_DIR -xzvf gdal.tgz >/dev/null 2>&1
+  rm gdal.tgz
+  echo "GDAL cached in $CACHE_DIR/vendor/gdal" | indent
+fi
+
+cp -r $CACHE_DIR/vendor/gdal /app/vendor/
+
+
+# Grab the datasource files to /app/datasource.*
+[ $ZIPPED_DATA_URL ] && env PATH=/app/vendor/gdal/bin:$PATH $BIN_DIR/download $ZIPPED_DATA_URL /app $CACHE_DIR
+
 # Install dependencies with Pip.
 puts-step "Installing dependencies using Pip ($PIP_VERSION)"
 
+
+env CPPFLAGS=`/app/vendor/geos/bin/geos-config --cflags` \
+    LIBRARY_PATH=$LIBRARY_PATH:/app/vendor/geos/lib \
+    /app/.heroku/python/bin/pip install --use-mirrors shapely | cleanup | indent
 
 [ ! "$FRESH_PYTHON" ] && bpwatch start pip_install
 [ "$FRESH_PYTHON" ] && bpwatch start pip_install_first
@@ -229,11 +288,11 @@ bpwatch stop collectstatic
 set-env PATH '$HOME/.heroku/python/bin:$PATH'
 set-env PYTHONUNBUFFERED true
 set-env PYTHONHOME /app/.heroku/python
-set-default-env LIBRARY_PATH /app/.heroku/vendor/lib
-set-default-env LD_LIBRARY_PATH /app/.heroku/vendor/lib
+set-default-env LIBRARY_PATH /app/.heroku/vendor/lib:/app/vendor/geos/lib:/app/vendor/proj/lib:/app/vendor/gdal/lib
+set-default-env LD_LIBRARY_PATH /app/.heroku/vendor/lib:/app/vendor/geos/lib:/app/vendor/proj/lib:/app/vendor/gdal/lib
 set-default-env LANG en_US.UTF-8
 set-default-env PYTHONHASHSEED random
-set-default-env PYTHONPATH /app/
+set-default-env PYTHONPATH /app/:/app/vendor/gdal/lib/python2.7/site-packages
 
 
 # Experimental post_compile hook.
