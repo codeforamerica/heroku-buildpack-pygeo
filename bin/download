@@ -26,31 +26,32 @@ if not exists(data_zip_file):
     if curl.returncode:
         raise RuntimeError('curl returned %d' % curl.returncode)
 
-src_name = None
-tmp_dir = mkdtemp()
-
-with ZipFile(data_zip_file, 'r') as archive:
-    for name in sorted(archive.namelist()):
-        base, ext = splitext(name.lower())
-    
-        if ext not in ('.dbf', '.prj', '.shp', '.shx', '.json'):
-            continue
-        
-        tmp_path = tmp_dir + '/datasource' + ext
-        print '      ', name, '-->', tmp_path
-        
-        with open(tmp_path, 'w') as tmp:
-            tmp.write(archive.read(name))
-            
-        if ext in ('.shp', '.json'):
-            src_name = tmp_path
-
-if not src_name:
-    raise RuntimeError('No .shp or .json found in %s' % data_zip_file)
-
 if exists(cache_dir + '/datasource.shp'):
     print '       Found', cache_dir + '/datasource.shp'
+
 else:
+    src_name = None
+    tmp_dir = mkdtemp()
+    
+    with ZipFile(data_zip_file, 'r') as archive:
+        for name in sorted(archive.namelist()):
+            base, ext = splitext(name.lower())
+        
+            if ext not in ('.dbf', '.prj', '.shp', '.shx', '.json'):
+                continue
+            
+            tmp_path = tmp_dir + '/datasource' + ext
+            print '      ', name, '-->', tmp_path
+            
+            with open(tmp_path, 'w') as tmp:
+                tmp.write(archive.read(name))
+                
+            if ext in ('.shp', '.json'):
+                src_name = tmp_path
+    
+    if not src_name:
+        raise RuntimeError('No .shp or .json found in %s' % data_zip_file)
+    
     print '      ', src_name, '-->', cache_dir + '/datasource.shp'
     print '       (ogr2ogr might take a long time)'
     ogr2ogr = Popen(('ogr2ogr', cache_dir + '/datasource.shp', src_name))
