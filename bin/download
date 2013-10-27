@@ -54,7 +54,7 @@ else:
     
     print '      ', src_name, '-->', cache_dir + '/datasource.shp'
     print '       (ogr2ogr might take a long time)'
-    ogr2ogr = Popen(('ogr2ogr', cache_dir + '/datasource.shp', src_name))
+    ogr2ogr = Popen(('ogr2ogr', '-t_srs', 'EPSG:4326', cache_dir + '/datasource.shp', src_name))
     ogr2ogr.wait()
     
     if ogr2ogr.returncode:
