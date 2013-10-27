@@ -261,7 +261,9 @@ cp -r $CACHE_DIR/vendor/gdal /app/vendor/
 
 
 # Grab the datasource files to /app/datasource.*
-[ $ZIPPED_DATA_URL ] && env PATH=/app/vendor/gdal/bin:$PATH $BIN_DIR/download $ZIPPED_DATA_URL /app $CACHE_DIR
+[ $ZIPPED_DATA_URL ] && \
+    env PATH=/app/vendor/gdal/bin:$PATH LD_LIBRARY_PATH=/app/vendor/proj/lib \
+    $BIN_DIR/download $ZIPPED_DATA_URL /app $CACHE_DIR
 
 # Install dependencies with Pip.
 puts-step "Installing dependencies using Pip ($PIP_VERSION)"
