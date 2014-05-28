@@ -15,7 +15,8 @@ export PATH=:/usr/local/bin:$PATH
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
-CACHE_DIR=$2
+CACHE_DIR=$2z
+ENV_DIR=$3
 
 CACHED_DIRS=".heroku"
 
@@ -259,6 +260,8 @@ fi
 
 cp -r $CACHE_DIR/vendor/gdal /app/vendor/
 
+# Retrieve ZIPPED_DATA_URL like in http://dncrews.com/tools/2014/03/21/heroku-user-env-changes/
+[ -f $ENV_DIR/ZIPPED_DATA_URL ] && export "ZIPPED_DATA_URL=$(cat $ENV_DIR/ZIPPED_DATA_URL)"
 
 # Grab the datasource files to /app/datasource.*
 [ $ZIPPED_DATA_URL ] && \
