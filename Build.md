@@ -2,9 +2,9 @@ Binary Notes
 ============
 
 Build notes for each binary package used in `bin/compile`. These sequences created
-[geos-3.3.8-heroku.tar.gz](http://forever.codeforamerica.org.s3.amazonaws.com/heroku-pygeo/geos-3.3.8-heroku.tar.gz),
-[proj-4.8.0-heroku.tar.gz](http://forever.codeforamerica.org.s3.amazonaws.com/heroku-pygeo/proj-4.8.0-heroku.tar.gz),
-and [gdal-1.11.1-heroku.tar.gz](http://forever.codeforamerica.org.s3.amazonaws.com/heroku-pygeo/gdal-1.11.1-heroku.tar.gz).
+[geos-3.3.8-heroku.tar.gz](http://forever.codeforamerica.org/heroku-pygeo/geos-3.3.8-heroku.tar.gz),
+[proj-4.8.0-heroku.tar.gz](http://forever.codeforamerica.org/heroku-pygeo/proj-4.8.0-heroku.tar.gz),
+and [gdal-1.11.1-heroku.tar.gz](http://forever.codeforamerica.org/heroku-pygeo/gdal-1.11.1-heroku.tar.gz).
 
 ### GEOS
 

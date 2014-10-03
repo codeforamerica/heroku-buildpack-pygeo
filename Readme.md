@@ -20,7 +20,7 @@ Example usage:
     
 The following two steps are optional, and will create `/app/datasource.shp` based on the remote file.
 
-    $ heroku config:set ZIPPED_DATA_URL=http://forever.codeforamerica.org.s3.amazonaws.com/heroku-pygeo/data-sfgov-org-parcels.zip
+    $ heroku config:set ZIPPED_DATA_URL=http://forever.codeforamerica.org/heroku-pygeo/data-sfgov-org-parcels.zip
     $ heroku labs:enable user-env-compile
 
 Make it so.
@@ -40,7 +40,7 @@ Make it so.
     -----> Fetching and installing GDAL 1.10.0
            GDAL cached in /app/tmp/repo.git/.cache/vendor/gdal
     -----> Preparing datasource
-           Downloading http://forever.codeforamerica.org.s3.amazonaws.com/heroku-pygeo/data-sfgov-org-parcels.zip to /app/tmp/repo.git/.cache/2aac292c2cbe849d129ccb4bbb7c1c3d.zip
+           Downloading http://forever.codeforamerica.org/heroku-pygeo/data-sfgov-org-parcels.zip to /app/tmp/repo.git/.cache/2aac292c2cbe849d129ccb4bbb7c1c3d.zip
            citylots.dbf --> /tmp/tmpiAkkBI/datasource.dbf
            citylots.prj --> /tmp/tmpiAkkBI/datasource.prj
            citylots.shp --> /tmp/tmpiAkkBI/datasource.shp
