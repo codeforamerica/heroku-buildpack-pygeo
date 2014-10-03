@@ -247,12 +247,12 @@ cp -r $CACHE_DIR/vendor/proj /app/vendor/
 #
 # Install GDAL
 #
-puts-step "Fetching and installing GDAL 1.10.0"
+puts-step "Fetching and installing GDAL 1.11.1"
 
 if [ -d $CACHE_DIR/vendor/gdal ]; then
   echo "GDAL found in $CACHE_DIR/vendor/gdal" | indent
 else
-  curl -o gdal.tgz -L http://forever.codeforamerica.org.s3.amazonaws.com/heroku-pygeo/gdal-1.10.0-heroku.tar.gz >/dev/null 2>&1
+  curl -o gdal.tgz -L http://forever.codeforamerica.org.s3.amazonaws.com/heroku-pygeo/gdal-1.11.1-heroku.tar.gz >/dev/null 2>&1
   tar -C $CACHE_DIR -xzvf gdal.tgz >/dev/null 2>&1
   rm gdal.tgz
   echo "GDAL cached in $CACHE_DIR/vendor/gdal" | indent

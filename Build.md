@@ -4,7 +4,7 @@ Binary Notes
 Build notes for each binary package used in `bin/compile`. These sequences created
 [geos-3.3.8-heroku.tar.gz](http://forever.codeforamerica.org.s3.amazonaws.com/heroku-pygeo/geos-3.3.8-heroku.tar.gz),
 [proj-4.8.0-heroku.tar.gz](http://forever.codeforamerica.org.s3.amazonaws.com/heroku-pygeo/proj-4.8.0-heroku.tar.gz),
-and [gdal-1.10.0-heroku.tar.gz](http://forever.codeforamerica.org.s3.amazonaws.com/heroku-pygeo/gdal-1.10.0-heroku.tar.gz).
+and [gdal-1.11.1-heroku.tar.gz](http://forever.codeforamerica.org.s3.amazonaws.com/heroku-pygeo/gdal-1.11.1-heroku.tar.gz).
 
 ### GEOS
 
@@ -32,7 +32,7 @@ Unpack tarball and `cd` into the source directory.
 
 ### GDAL
 
-Download `gdal-1.10.0.tar.gz` from
+Download `gdal-1.11.1.tar.gz` from
 [osgeo.org](http://trac.osgeo.org/gdal/wiki/DownloadSource).
 Unpack tarball and `cd` into the source directory.
 
@@ -54,4 +54,4 @@ GDAL build puts the Python libraries in the wrong place, so we move them under `
            /app/.heroku/python/lib/python2.7/site-packages/GDAL-*.egg/osgeo \
            /app/vendor/gdal/lib/python2.7/site-packages/
 
-    tar -C /app -czvf gdal-1.10.0-heroku.tar.gz vendor/gdal
+    tar -C /app -czvf gdal-1.11.1-heroku.tar.gz vendor/gdal
