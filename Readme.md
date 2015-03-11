@@ -6,7 +6,7 @@ This is a [Heroku buildpack](http://devcenter.heroku.com/articles/buildpacks) fo
 It has been modified from the [Heroku original](https://github.com/heroku/heroku-buildpack-python) to add precompiled binaries for [GEOS](http://trac.osgeo.org/geos/), [PROJ.4](http://trac.osgeo.org/proj/), [GDAL](http://trac.osgeo.org/gdal/), and [Shapely](http://toblerity.org/shapely/).
 
 Optionally, it will also fetch and convert a single zipped OGR datasource to `/app/datasource.shp` when provided with the environment variable `ZIPPED_DATA_URL`.
-Note that [user-env-compile](https://devcenter.heroku.com/articles/labs-user-env-compile) from Heroku Labs must be enabled for this to work:
+Note that Heroku stack [must be set to `cedar`](https://devcenter.heroku.com/articles/cedar) for this to work:
 
 Usage
 -----
@@ -16,7 +16,7 @@ Example usage:
     $ ls
     Procfile  requirements.txt  web.py
 
-    $ heroku create --buildpack https://github.com/codeforamerica/heroku-buildpack-pygeo
+    $ heroku create --stack cedar --buildpack https://github.com/codeforamerica/heroku-buildpack-pygeo
     
 The following two steps are optional, and will create `/app/datasource.shp` based on the remote file.
 
