@@ -18,10 +18,9 @@ Example usage:
 
     $ heroku create --stack cedar --buildpack https://github.com/codeforamerica/heroku-buildpack-pygeo
     
-The following two steps are optional, and will create `/app/datasource.shp` based on the remote file.
+The following step is optional, and will create `/app/datasource.shp` based on the remote file.
 
     $ heroku config:set ZIPPED_DATA_URL=http://forever.codeforamerica.org/heroku-pygeo/data-sfgov-org-parcels.zip
-    $ heroku labs:enable user-env-compile
 
 Make it so.
 
